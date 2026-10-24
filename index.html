@@ -3,140 +3,98 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#11111b">
-  <meta name="description" content="Create and organize original MOBA-inspired hero skin concepts in MLBB Skin Studio.">
-  <title>MLBB Skin Studio</title>
+  <meta name="theme-color" content="#100b1b">
+  <meta name="description" content="Create and organize original fantasy game skin concepts.">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <title>Skin Studio — Fan Concept Workshop</title>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="MLBB Skin Studio home">
-      <span class="brand-mark">✦</span>
-      <span><strong>SKIN STUDIO</strong><small>FAN CONCEPT WORKSHOP</small></span>
-    </a>
-    <button id="installBtn" class="install-btn" hidden>Install app</button>
-  </header>
+<header class="topbar">
+  <div class="brand-mark">✦</div>
+  <div class="brand"><strong>SKIN STUDIO</strong><span>FAN CONCEPT WORKSHOP</span></div>
+  <button id="installBtn" class="button primary hidden">Install app</button>
+</header>
 
-  <main class="shell">
-    <section class="hero-banner">
-      <div class="banner-copy">
-        <span class="eyebrow">CREATE • CUSTOMIZE • COLLECT</span>
-        <h1>Your next legendary<br><em>skin concept</em> starts here.</h1>
-        <p>Design original fantasy hero looks, save your ideas, and preview your concepts in one place.</p>
-        <a href="#studio" class="primary-btn">Open Skin Studio <span>↗</span></a>
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow">CREATE • CUSTOMIZE • COLLECT</p>
+    <h1>Design your next <span>legendary concept.</span></h1>
+    <p class="muted">Build original fantasy-game skin ideas, preview the palette, add reference images, and prepare prompts for an image generator.</p>
+  </section>
+
+  <section class="layout">
+    <form id="editor" class="panel editor">
+      <div class="section-head"><div><p class="eyebrow">01 / CONCEPT SETUP</p><h2>Skin blueprint</h2></div><span class="badge">V2</span></div>
+      <label>Concept name<input id="name" maxlength="60" value="Void Phantom" placeholder="e.g. Solar Warden"></label>
+      <div class="two">
+        <label>Hero archetype<select id="role"><option>Assassin</option><option>Mage</option><option>Marksman</option><option>Fighter</option><option>Tank</option><option>Support</option></select></label>
+        <label>Rarity<select id="tier"><option>Basic</option><option>Elite</option><option>Special</option><option>Epic</option><option>Legendary</option><option>Mythic</option></select></label>
       </div>
-      <div class="banner-art" aria-hidden="true">
-        <div class="orb orb-one"></div><div class="orb orb-two"></div>
-        <div class="blade blade-one"></div><div class="blade blade-two"></div>
-        <div class="sigil">✦</div>
-        <div class="art-caption">CONCEPT<br><b>001</b></div>
+      <div class="two">
+        <label>Theme<select id="theme"><option>Shadow</option><option>Celestial</option><option>Cyberpunk</option><option>Infernal</option><option>Oceanic</option><option>Nature</option><option>Mecha</option><option>Arcane</option><option>Frost</option><option>Cosmic</option></select></label>
+        <label>Signature weapon / detail<input id="weapon" maxlength="100" value="Twin energy blades" placeholder="e.g. Crystal bow"></label>
       </div>
-    </section>
+      <label>Armor / outfit details<textarea id="outfit" rows="2" placeholder="Describe armor, fabric, mask, hairstyle, silhouette...">Layered dark armor, sharp shoulder plates, glowing violet mask</textarea></label>
+      <label>Visual effects<textarea id="effects" rows="2" placeholder="Describe aura, trails, particles, impact effects...">Violet energy trails, drifting cosmic particles, glowing blade edges</textarea></label>
+      <label>Mood and finish<input id="mood" maxlength="140" value="Polished high-quality game concept art, dramatic lighting"></label>
 
-    <section class="notice">
-      <span class="notice-icon">ⓘ</span>
-      <p><strong>Fan-made concept tool.</strong> This app creates and stores concept descriptions and color palettes. It does not modify MLBB, unlock paid skins, or inject assets into the game. MLBB and its characters belong to their respective rights holders.</p>
-    </section>
+      <div class="section-head small-head"><div><p class="eyebrow">02 / COLOR LAB</p><h2>Palette</h2></div></div>
+      <div class="colors">
+        <label>Main color <span><input type="color" id="mainColor" value="#2b0033"><input id="mainHex" class="hex" value="#2b0033" maxlength="7"></span></label>
+        <label>Accent color <span><input type="color" id="accentColor" value="#8b5cf6"><input id="accentHex" class="hex" value="#8b5cf6" maxlength="7"></span></label>
+        <label>Highlight <span><input type="color" id="highlightColor" value="#e9d5ff"><input id="highlightHex" class="hex" value="#e9d5ff" maxlength="7"></span></label>
+      </div>
+      <label class="range-label">Glow intensity <output id="glowValue">70%</output><input id="glow" type="range" min="10" max="100" value="70"></label>
 
-    <section id="studio" class="studio-grid">
-      <div class="panel editor-panel">
-        <div class="section-heading">
-          <div><span class="eyebrow">WORKSPACE</span><h2>Skin editor</h2></div>
-          <span class="step-pill">01 / DESIGN</span>
+      <div class="section-head small-head"><div><p class="eyebrow">03 / REFERENCE</p><h2>Your inspiration</h2></div></div>
+      <label class="upload-box">＋ Add a reference image<input id="reference" type="file" accept="image/*" hidden><span>Choose an image from your phone. It stays in this browser unless you export it.</span></label>
+      <div id="referencePreview" class="reference-preview hidden"><img id="referenceImage" alt="Your reference"><button type="button" id="removeReference" class="button subtle">Remove image</button></div>
+
+      <div class="actions">
+        <button type="submit" class="button primary">Update preview</button>
+        <button type="button" id="saveBtn" class="button">Save concept</button>
+        <button type="button" id="resetBtn" class="button subtle">Reset editor</button>
+      </div>
+    </form>
+
+    <div class="right-column">
+      <section class="panel preview-panel">
+        <div class="section-head"><div><p class="eyebrow">LIVE PREVIEW</p><h2 id="previewName">Void Phantom</h2></div><span id="previewTier" class="badge">EPIC</span></div>
+        <div id="artboard" class="artboard">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="character">
+            <div class="cape"></div><div class="head"><div class="visor"></div></div>
+            <div class="neck"></div><div class="torso"></div><div class="shoulder left"></div><div class="shoulder right"></div>
+            <div class="arm left-arm"></div><div class="arm right-arm"></div><div class="blade blade-left"></div><div class="blade blade-right"></div>
+            <div class="waist"></div><div class="leg left-leg"></div><div class="leg right-leg"></div><div class="boot left-boot"></div><div class="boot right-boot"></div>
+          </div>
+          <div class="sigil">✦</div><div class="preview-caption"><span id="previewRole">ASSASSIN</span><span id="previewTheme">SHADOW</span></div>
         </div>
+        <p class="hint">Stylized 2.5D concept preview — not an official hero model or an in-game skin.</p>
+        <div class="preview-meta"><div><span class="muted">Signature</span><strong id="previewWeapon">Twin energy blades</strong></div><div><span class="muted">Glow</span><strong id="previewGlow">70%</strong></div></div>
+      </section>
 
-        <form id="skinForm">
-          <label for="skinName">Skin concept name</label>
-          <input id="skinName" maxlength="48" placeholder="e.g. Void Phantom" value="Void Phantom" required>
+      <section class="panel prompt-panel">
+        <div class="section-head"><div><p class="eyebrow">IMAGE GENERATION WORKFLOW</p><h2>AI art prompt</h2></div></div>
+        <p class="muted small-text">This creates a prompt, not the image itself. Copy it into an image generator you choose.</p>
+        <textarea id="promptOutput" rows="8" readonly></textarea>
+        <div class="actions"><button id="copyPrompt" class="button primary" type="button">Copy prompt</button><button id="downloadPrompt" class="button" type="button">Download prompt</button></div>
+      </section>
+    </div>
+  </section>
 
-          <div class="two-col">
-            <div>
-              <label for="heroType">Hero inspiration</label>
-              <select id="heroType">
-                <option>Assassin</option><option>Mage</option><option>Marksman</option>
-                <option>Fighter</option><option>Tank</option><option>Support</option>
-              </select>
-            </div>
-            <div>
-              <label for="theme">Theme</label>
-              <select id="theme">
-                <option value="Cosmic">Cosmic</option><option value="Cyberpunk">Cyberpunk</option>
-                <option value="Shadow">Shadow</option><option value="Royal">Royal</option>
-                <option value="Flame">Flame</option><option value="Frost">Frost</option>
-                <option value="Nature">Nature</option><option value="Celestial">Celestial</option>
-              </select>
-            </div>
-          </div>
+  <section class="collection-section">
+    <div class="section-head collection-head"><div><p class="eyebrow">YOUR COLLECTION</p><h2>Saved concepts <span id="count" class="count">0</span></h2></div><div class="actions inline"><button id="exportBtn" class="button">Export JSON</button><label class="button file-button">Import JSON<input type="file" id="importFile" accept=".json,application/json" hidden></label></div></div>
+    <p class="muted small-text">Saved concepts stay in this browser on this device. Export a backup before clearing browser data.</p>
+    <div id="gallery" class="gallery"></div>
+    <div id="emptyState" class="empty-state">No saved concepts yet. Make one above and tap <strong>Save concept</strong>.</div>
+  </section>
+</main>
 
-          <label for="weapon">Weapon / signature detail</label>
-          <input id="weapon" maxlength="80" value="Twin energy blades" placeholder="e.g. Twin energy blades">
-
-          <label>Color palette</label>
-          <div class="color-row">
-            <label class="color-choice"><input type="color" id="color1" value="#171522"><span>Main</span></label>
-            <label class="color-choice"><input type="color" id="color2" value="#8b5cf6"><span>Accent</span></label>
-            <label class="color-choice"><input type="color" id="color3" value="#e9d5ff"><span>Highlight</span></label>
-          </div>
-
-          <label for="effects">Visual effects</label>
-          <textarea id="effects" rows="3" maxlength="180">Violet energy trails, drifting cosmic particles, glowing blade edges</textarea>
-
-          <label for="rarity">Concept tier</label>
-          <select id="rarity"><option>Elite</option><option selected>Epic</option><option>Legendary</option><option>Mythic concept</option></select>
-
-          <div class="button-row">
-            <button class="primary-btn" type="submit">Update preview <span>✦</span></button>
-            <button class="secondary-btn" id="saveBtn" type="button">Save concept</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="preview-column">
-        <div class="panel preview-panel">
-          <div class="section-heading">
-            <div><span class="eyebrow">LIVE PREVIEW</span><h2 id="previewName">Void Phantom</h2></div>
-            <span id="previewTier" class="tier">EPIC</span>
-          </div>
-          <div id="characterPreview" class="character-preview">
-            <div class="preview-glow"></div>
-            <div class="preview-ring ring-a"></div><div class="preview-ring ring-b"></div>
-            <div class="character-symbol">✦</div>
-            <div class="character-silhouette">
-              <div class="head"></div><div class="hood"></div><div class="torso"></div>
-              <div class="cape"></div><div class="arm arm-left"></div><div class="arm arm-right"></div>
-              <div class="leg leg-left"></div><div class="leg leg-right"></div>
-              <div class="weapon weapon-left"></div><div class="weapon weapon-right"></div>
-            </div>
-            <div class="preview-label"><span id="previewRole">ASSASSIN</span><b id="previewTheme">COSMIC</b></div>
-          </div>
-          <div class="preview-meta">
-            <div><small>WEAPON</small><strong id="previewWeapon">Twin energy blades</strong></div>
-            <div><small>VISUAL EFFECTS</small><strong id="previewEffects">Violet energy trails, drifting cosmic particles, glowing blade edges</strong></div>
-          </div>
-          <p class="hint">Preview is an abstract concept illustration, not an in-game 3D model.</p>
-        </div>
-        <div class="panel prompt-panel">
-          <div class="section-heading"><div><span class="eyebrow">AI-READY BRIEF</span><h2>Concept prompt</h2></div><span class="spark">✧</span></div>
-          <p id="promptText">Create an original cosmic fantasy assassin concept...</p>
-          <button id="copyPrompt" class="secondary-btn full-btn" type="button">Copy prompt</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="gallery-section">
-      <div class="section-heading">
-        <div><span class="eyebrow">YOUR COLLECTION</span><h2>Saved concepts <span id="savedCount" class="count">0</span></h2></div>
-        <button id="exportBtn" class="secondary-btn">Export JSON</button>
-      </div>
-      <div id="gallery" class="gallery">
-        <div id="emptyState" class="empty-state"><span>✧</span><h3>Your gallery is waiting</h3><p>Save your first concept to start a collection.</p></div>
-      </div>
-    </section>
-
-    <footer><span>SKIN STUDIO</span><span>Independent fan concept project • Not affiliated with MOONTON</span></footer>
-  </main>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+<footer><p class="eyebrow">SKIN STUDIO</p><p class="muted">Independent fan concept project • Not affiliated with MOONTON. Use original artwork or images you have permission to use.</p></footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
 </body>
 </html>
